@@ -154,12 +154,6 @@ public class VotePanel : MonoBehaviourPunCallbacks
         //photonView.RPC("SpawnSkipAnonymImageRPC", RpcTarget.All, _voteData.SkipCount);
     }
 
-    [PunRPC]
-    public void SpawnSkipAnonymImageRPC(int index)
-    {
-
-    }
-
     //투표 종료 후 득표 수 만큼 플레이어 패널에 익명 이미지 생성
     private void SpawnAnonymImage()
     {
@@ -177,12 +171,6 @@ public class VotePanel : MonoBehaviourPunCallbacks
             }
         }
         //photonView.RPC("SpawnAnonymImageRPC", RpcTarget.All, VoteManager.VoteCounts);
-    }
-
-    [PunRPC]
-    public void SpawnAnonymImageRPC(int index)
-    {
-
     }
 
     // 시간 측정 함수

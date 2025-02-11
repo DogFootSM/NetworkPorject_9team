@@ -68,11 +68,11 @@ public class VoiceManager : MonoBehaviourPunCallbacks
         }
     }
 
-    public void MeDead()
-    {
         // photonView.RPC(nameof(MeDeadRpc), RpcTarget.All, playerNumber);
         // Debug.Log($"겟플레이어넘버 = {PhotonNetwork.LocalPlayer.GetPlayerNumber()}");
         // Debug.Log($"액터넘버 = {PhotonNetwork.LocalPlayer.ActorNumber}");
+    public void ChangeGroup()
+    {
         _recorder.InterestGroup = 2;
         _connection.Client.OpChangeGroups(ALIVE, DEAD);
     }

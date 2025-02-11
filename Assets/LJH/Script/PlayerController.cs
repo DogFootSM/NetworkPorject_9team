@@ -478,7 +478,7 @@ public class PlayerController : MonoBehaviourPun
         if (photonView.IsMine)
         {
             SoundManager.SFXPlay(isGame == true ? SoundManager.Data.Dead : null);
-            voiceManager.MeDead();
+            voiceManager.ChangeGroup();
         }
     }
 

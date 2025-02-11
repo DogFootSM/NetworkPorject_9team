@@ -11,7 +11,7 @@ public class VoteManager : MonoBehaviourPunCallbacks
 {
     public static VoteManager Instance;
 
-    private int[] _voteCounts = new int[12]; // 각 플레이어의(ActorNumber와 연결된 인덱스 번호)의 득표수를 배열로 저장
+    [SerializeField] int[] _voteCounts = new int[12]; // 각 플레이어의(ActorNumber와 연결된 인덱스 번호)의 득표수를 배열로 저장
     public static int[] VoteCounts { get { return Instance._voteCounts; } }
 
     public static PlayerDataContainer PlayerDataContainer => PlayerDataContainer.Instance;
@@ -48,8 +48,6 @@ public class VoteManager : MonoBehaviourPunCallbacks
 
         PhotonView.RPC("VotePlayerRPC", RpcTarget.All, index, PhotonNetwork.LocalPlayer.GetPlayerNumber());
         VotePanel.DisableButton();
-
-        // 투표한 본인 패널에 이미지 띄우기      
     }
 
     [PunRPC]
@@ -81,44 +79,54 @@ public class VoteManager : MonoBehaviourPunCallbacks
         Debug.Log($" 스킵 수 : {_voteData.SkipCount}");
     }
 
-    // 투표 종료 후 집계 기능
+    //투표 후 집계 기능
     public void GetVoteResult()
     {
-        // 최다 득표자 찾는 기능
+        // 최다 득표자 및 동점 여부 판단
         bool isKick = false;
-        int top = -1;
-        int top2 = -1;
-        int playerIndex = -1;
+        int top = -1; // 최고 득표수
+        int playerIndex = -1; // 최고 득표 플레이어
 
+        // 1. 최고 득표수 찾기
         for (int i = 0; i < 12; i++)
         {
             if (_voteCounts[i] > top)
             {
                 top = _voteCounts[i];
                 playerIndex = i;
-
                 isKick = true;
             }
-            else if (_voteCounts[i] == top)
+        }
+
+        // 2. 동점 여부 확인
+        int sameCount = 0;
+        for (int i = 0; i < 12; i++)
+        {
+            if (_voteCounts[i] == top)
             {
-                top2 = _voteCounts[i];
-                Debug.Log("동점표로 없던 일~");
-                isKick = false;
-                continue;
+                sameCount++;
             }
         }
-        Debug.Log($"{_voteData.SkipCount}표 기권!");
-        Debug.Log($"{playerIndex}번 플레이어 당선 {top}표 : 추방됩니다");
 
+        if (sameCount > 1)
+        {
+            Debug.Log("동점표로 없던 일~");
+            isKick = false;
+        }
+
+        Debug.Log($"{_voteData.SkipCount}표 기권!");
+        if (isKick)
+        {
+            Debug.Log($"{playerIndex}번 플레이어 당선 {top}표 : 추방됩니다");
+        }
 
         PlayerData playerData = PlayerDataContainer.Instance.GetPlayerData(playerIndex);
         if (isKick == true)
         {
-            StartCoroutine(ShowVoteResultRoutine(playerIndex ,playerData.PlayerColor, playerData.PlayerName, playerData.Type));
+            StartCoroutine(ShowVoteResultRoutine(playerIndex, playerData.PlayerColor, playerData.PlayerName, playerData.Type));
         }
         else
         {
-            //TODO: 동점 시 아무도 안쫓겨나는 컷 씬
             StartCoroutine(ShowVoteSkipRoutine());
         }
     }

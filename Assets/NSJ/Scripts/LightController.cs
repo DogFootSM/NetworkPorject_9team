@@ -22,7 +22,7 @@ public class LightController : MonoBehaviour
                 _light.SetActive(true);
             }
         }
-        StartCoroutine(CheckPlayerDie());
+        /*StartCoroutine(CheckPlayerDie());*/
     }
 
     IEnumerator CheckPlayerDie()
