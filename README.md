@@ -16,5 +16,4 @@
 - 오리들은 맵 지형을 돌아다니며 미션을 수행 or 거위 유저 PK
 
 # 3. 영상 및 기술서
-- Notion : https://www.notion.so/153f154c1686808ab084e986586cf92c?pvs=4
 - Youtube : https://youtu.be/rFbFhdFWFwE
